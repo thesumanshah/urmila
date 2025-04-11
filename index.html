@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Mobile Responsive Meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hangout Invitation</title>
+  <!-- Google Fonts for Global & Love Letter -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Global Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      background: linear-gradient(-45deg, #f06292, #ff8a80, #f48fb1, #ff80ab);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      min-height: 100vh;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* Container & Page Transition Styles */
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+      animation: fadeIn 0.8s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Button Styles */
+    .button button {
+      background-color: rgb(71, 187, 223);
+      border: none;
+      color: white;
+      padding: 15px 20px;
+      font-size: 15px;
+      border-radius: 10px;
+      display: inline-block;
+      margin: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    .button button:hover {
+      background-color: rgb(60, 165, 205);
+      transform: scale(1.05);
+    }
+    /* Hide all pages by default */
+    .page {
+      display: none;
+    }
+    /* Responsive Images & Text */
+    img {
+      max-width: 90%;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 480px) {
+      .button button {
+        padding: 12px 16px;
+        font-size: 14px;
+        margin: 8px;
+      }
+      h1 {
+        font-size: 1.5em;
+      }
+      h2 {
+        font-size: 1.2em;
+      }
+    }
+    /* Love Letter Envelope Styles */
+    /* Use Dancing Script for the letter */
+    #envelope {
+      position: relative;
+      width: 280px;
+      height: 180px;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 40px;
+      background-color: #d9534f; /* Warm romantic red */
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    .front {
+      position: absolute;
+      width: 0;
+      height: 0;
+      z-index: 3;
+    }
+    .flap {
+      border-left: 140px solid transparent;
+      border-right: 140px solid transparent;
+      border-bottom: 82px solid transparent;
+      border-top: 98px solid #d9534f;
+      transform-origin: top;
+      pointer-events: none;
+    }
+    .pocket {
+      border-left: 140px solid #f5a3a2;
+      border-right: 140px solid #f5a3a2;
+      border-bottom: 90px solid #ff6f61;
+      border-top: 90px solid transparent;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+    .letter {
+      position: relative;
+      background-color: #fff;
+      width: 90%;
+      margin: auto;
+      height: 90%;
+      top: 5%;
+      border-radius: 6px;
+      box-shadow: 0 2px 26px rgba(0, 0, 0, 0.12);
+      font-family: "Dancing Script", cursive;
+    }
+    .letter:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    .words {
+      position: absolute;
+      left: 10%;
+      width: 80%;
+      height: 14%;
+      background-color: #ffe6e6;
+    }
+    .words.line1 {
+      top: 10%;
+      font-size: 0.7rem;
+      width: 20%;
+      height: 7%;
+    }
+    .words.line2 {
+      top: 30%;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+    .words.line3 {
+      top: 50%;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+    .words.line4 {
+      top: 70%;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+    .open .flap {
+      transform: rotateX(180deg);
+      transition: transform 0.4s ease, z-index 0.6s;
+      z-index: 1;
+    }
+    .close .flap {
+      transform: rotateX(0deg);
+      transition: transform 0.4s 0.6s ease, z-index 1s;
+      z-index: 5;
+    }
+    .close .letter {
+      transform: translateY(0px);
+      transition: transform 0.4s ease, z-index 1s;
+      z-index: 1;
+    }
+    .open .letter {
+      transform: translateY(-100px);
+      transition: transform 0.4s 0.6s ease, z-index 0.6s;
+      z-index: 2;
+    }
+    .hearts {
+      position: absolute;
+      top: 90px;
+      left: 0;
+      right: 0;
+      z-index: 2;
+    }
+    .heart {
+      position: absolute;
+      bottom: 0;
+      right: 10%;
+      pointer-events: none;
+    }
+    .heart:before,
+    .heart:after {
+      position: absolute;
+      content: "";
+      left: 50px;
+      top: 0;
+      width: 50px;
+      height: 80px;
+      background: #e60073;
+      border-radius: 50px 50px 0 0;
+      transform: rotate(-45deg);
+      transform-origin: 0 100%;
+      pointer-events: none;
+    }
+    .heart:after {
+      left: 0;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%;
+    }
+    .close .heart {
+      opacity: 0;
+      animation: none;
+    }
+    .a1 {
+      left: 20%;
+      transform: scale(0.6);
+      opacity: 1;
+      animation: slideUp 4s linear 1, sideSway 2s ease-in-out 4 alternate;
+      animation-fill-mode: forwards;
+      animation-delay: 0.7s;
+    }
+    .a2 {
+      left: 55%;
+      transform: scale(1);
+      opacity: 1;
+      animation: slideUp 5s linear 1, sideSway 4s ease-in-out 2 alternate;
+      animation-fill-mode: forwards;
+      animation-delay: 0.7s;
+    }
+    .a3 {
+      left: 10%;
+      transform: scale(0.8);
+      opacity: 1;
+      animation: slideUp 7s linear 1, sideSway 2s ease-in-out 6 alternate;
+      animation-fill-mode: forwards;
+      animation-delay: 0.7s;
+    }
+    @keyframes slideUp {
+      0% { top: 0; }
+      100% { top: -600px; }
+    }
+    @keyframes sideSway {
+      0% { margin-left: 0px; }
+      100% { margin-left: 50px; }
+    }
+    /* Additional styling for love letter reset button */
+    .reset {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .reset button {
+      font-weight: 800;
+      transition: all 0.1s linear;
+      background-color: transparent;
+      border: solid 2px #d9534f;
+      border-radius: 4px;
+      color: #d9534f;
+      display: inline-block;
+      font-size: 14px;
+      text-transform: uppercase;
+      margin: 5px;
+      padding: 10px;
+      min-width: 120px;
+      cursor: pointer;
+    }
+    .reset button:hover {
+      background-color: #d9534f;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <!-- SPA Pages -->
+  
+  <!-- Page: Index -->
+  <div id="page-index" class="page container">
+    <img src="download.png" alt="Invitation" />
+    <h1>Do you love me? 🤗</h1>
+    <div class="button">
+      <button id="index-yes">Yes</button>
+      <button id="index-no">No</button>
+    </div>
+  </div>
+
+  <!-- Page: page1 -->
+  <div id="page1" class="page container">
+    <img src="asking.gif" alt="Ask again" />
+    <h1>Soch lo ache se! 😒</h1>
+    <div class="button">
+      <button id="page1-yes">Yes</button>
+      <button id="page1-no">No</button>
+    </div>
+  </div>
+
+  <!-- Page: page2 -->
+  <div id="page2" class="page container">
+    <img src="please-cute.gif" alt="Please reconsider" />
+    <h1>Ek bar or soch le! 😣</h1>
+    <div class="button">
+      <button id="page2-yes">Yes</button>
+      <button id="page2-no">No</button>
+    </div>
+  </div>
+
+  <!-- Page: page3 -->
+  <div id="page3" class="page container">
+    <img src="nono.gif" alt="No, no" />
+    <h1>Manja na kitna bhav khaige! 😭</h1>
+    <div class="button">
+      <button id="page3-yes">Yes</button>
+      <button id="page3-no">No</button>
+    </div>
+  </div>
+
+  <!-- Page: page4 -->
+  <div id="page4" class="page container">
+    <img src="wating.gif" alt="Last chance" />
+    <h1>Last chance? 😗</h1>
+    <div class="button">
+      <button id="page4-yes">Yes</button>
+      <button id="page4-no">No</button>
+    </div>
+  </div>
+
+  <!-- Page: Yes (Love Letter) -->
+  <div id="page-yes" class="page container">
+    <!-- Love Letter Envelope & Contents -->
+    <div class="envlope-wrapper">
+      <div id="envelope" class="close">
+        <div class="front flap"></div>
+        <div class="front pocket"></div>
+        <div class="letter">
+          <div class="words line1">To: Crush</div>
+          <div class="words line2">Dear crush, you are so beautiful</div>
+          <div class="words line3">That every time I see you</div>
+          <div class="words line4">my world stops,</div>
+        </div>
+        <div class="hearts">
+          <div class="heart a1"></div>
+          <div class="heart a2"></div>
+          <div class="heart a3"></div>
+        </div>
+      </div>
+    </div>
+    <div class="reset">
+      <button id="open">Open</button>
+      <button id="resetBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- jQuery & Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    /*********************
+     * SPA Navigation
+     *********************/
+    const pages = ["page-index", "page1", "page2", "page3", "page4", "page-yes"];
+    function showPage(pageId) {
+      pages.forEach(id => {
+        const el = document.getElementById(id);
+        if(id === pageId) {
+          el.style.display = "flex";
+          // Restart fade animation if desired
+          el.classList.remove("fadeIn");
+          void el.offsetWidth;
+          el.classList.add("fadeIn");
+        } else {
+          el.style.display = "none";
+        }
+      });
+    }
+    // Initial page load
+    showPage("page-index");
+    // Navigation Listeners
+    document.getElementById("index-yes").addEventListener("click", () => showPage("page-yes"));
+    document.getElementById("index-no").addEventListener("click", () => showPage("page1"));
+    document.getElementById("page1-yes").addEventListener("click", () => showPage("page4"));
+    document.getElementById("page1-no").addEventListener("click", () => showPage("page2"));
+    document.getElementById("page2-yes").addEventListener("click", () => showPage("page4"));
+    document.getElementById("page2-no").addEventListener("click", () => showPage("page3"));
+    document.getElementById("page3-yes").addEventListener("click", () => showPage("page4"));
+    document.getElementById("page3-no").addEventListener("click", () => showPage("page4"));
+    document.getElementById("page4-yes").addEventListener("click", () => showPage("page-yes"));
+    document.getElementById("page4-no").addEventListener("click", function() {
+      const button = document.getElementById("page4-no");
+      const maxX = window.innerWidth - button.offsetWidth;
+      const maxY = window.innerHeight - button.offsetHeight;
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+      button.style.position = "absolute";
+      button.style.left = randomX + "px";
+      button.style.top = randomY + "px";
+    });
+    /*********************
+     * Love Letter Envelope JS
+     *********************/
+    $(document).ready(function () {
+      var envelope = $("#envelope");
+      var btn_open = $("#open");
+      var btn_reset = $("#resetBtn");
+      envelope.click(function () { openEnvelope(); });
+      btn_open.click(function () { openEnvelope(); });
+      btn_reset.click(function () { closeEnvelope(); });
+      function openEnvelope() {
+        envelope.addClass("open").removeClass("close");
+      }
+      function closeEnvelope() {
+        envelope.addClass("close").removeClass("open");
+      }
+    });
+  </script>
+</body>
+</html>
